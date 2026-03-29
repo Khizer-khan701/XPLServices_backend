@@ -8,7 +8,7 @@ from app.core.config import settings
 
 # ---- Models Setup ----
 openai_llm = ChatOpenAI(
-    model="gpt-5-turbo",
+    model="gpt-4o",
     api_key=settings.OPENAI_API_KEY,
 )
 
