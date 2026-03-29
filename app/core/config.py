@@ -8,8 +8,6 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str
     OPENROUTER_API_KEY: str
 
-    # ElevenLabs (TTS)
-    ELEVENLABS_API_KEY: str
 
     # Database
     DATABASE_URL: str
