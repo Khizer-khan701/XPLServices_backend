@@ -37,7 +37,7 @@ A robust, multi-model AI backend designed for **Sunmarke School**. This system l
 ### 2. Installation
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/Khizer-khan701/XPLServices_backend
 cd xpl-ai-agent-backend
 
 # Create and activate virtual environment (Windows)
