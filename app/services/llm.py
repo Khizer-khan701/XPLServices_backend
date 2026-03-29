@@ -22,7 +22,6 @@ kimi_llm = ChatOpenAI(
 gemini_llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=settings.GEMINI_API_KEY,
-    transport="rest",
     convert_system_message_to_human=True
 )
 
