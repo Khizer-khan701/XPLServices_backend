@@ -18,8 +18,8 @@ kimi_llm = ChatOpenAI(
     model="moonshotai/kimi-k2.5",
     api_key=settings.OPENROUTER_API_KEY,
     base_url="https://openrouter.ai/api/v1",
-    max_tokens=400,
-    temperature=0.4,
+    max_tokens=500,
+    temperature=0.9,
 )
 
 gemini_llm = ChatGoogleGenerativeAI(
