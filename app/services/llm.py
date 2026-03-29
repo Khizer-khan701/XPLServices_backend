@@ -10,37 +10,39 @@ from app.core.config import settings
 openai_llm = ChatOpenAI(
     model="gpt-4o",
     api_key=settings.OPENAI_API_KEY,
-    temperature=0.2, # Slightly higher temperature to handle minor variations/typos better
+    temperature=0.7,
+    top_p=0.9
 )
 
 kimi_llm = ChatOpenAI(
     model="moonshotai/kimi-k2.5",
     api_key=settings.OPENROUTER_API_KEY,
     base_url="https://openrouter.ai/api/v1",
-    max_tokens=500,
-    temperature=0.2,
+    max_tokens=400,
+    temperature=0.4,
 )
 
 gemini_llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=settings.GEMINI_API_KEY,
     convert_system_message_to_human=True,
-    temperature=0.2,
+    temperature=0.5,
 )
 
 # ---- Prompt Template ----
-# Updated system instruction to handle name variations (e.g., Sanmarg referring to Sunmarke)
 prompt_template = ChatPromptTemplate.from_messages([
-    ("system", """You are a helpful assistant for Sunmarke School.
-Your goal is to answer questions about the school based ONLY on the provided context.
-
-IMPORTANT: If the user refers to the school by a slightly different name (e.g., "Sanmarg", "Sunmark", "Sunmarke School"), assume they are referring to Sunmarke School and answer using the provided context.
-
-If the answer is absolutely NOT in the context, say: "I don't have information about that in my knowledge base."
+    ("system", """You are an expert AI assistant for Sunmarke School.
+Your role is to provide detailed, friendly, and accurate information based on the documents provided in the context below.
 
 Context:
-{context}"""),
-    ("human", "{question}"),
+{context}
+
+CRITICAL INSTRUCTIONS:
+1. Use ONLY the provided context to answer. If the context contains the information, you MUST provide it even if the user made typos in names (e.g., 'Sanmarg' -> 'Sunmarke').
+2. Be comprehensive. Don't give one-sentence answers; extract all relevant details from the context.
+3. If the answer is truly not found in the context after careful search, only then say: "I don't have information about that in my knowledge base."
+"""),
+    ("human", "Question: {question}"),
 ])
 
 # ---- Chains ----
@@ -85,7 +87,7 @@ async def ask_gemini(context: str, question: str) -> str:
         return f"Gemini Error: {str(e)}"
 
 
-# ---- Teeno Simultaneously ----
+# ---- Simultaneously ----
 async def ask_all_llms(context: str, question: str) -> dict:
     openai_res, kimi_res, gemini_res = await asyncio.gather(
         ask_openai(context, question),

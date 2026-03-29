@@ -16,13 +16,12 @@ class QueryResponse(BaseModel):
 @router.post("/ask")
 async def ask(request: QueryRequest):
     try:
-        # Step 1: RAG se context retrieve karo
+ 
         context = retrieve_context(request.question)
 
         if not context:
             context = "No relevant context found."
 
-        # Step 2: Teeno LLMs ko simultaneously bhejo
         answers = await ask_all_llms(context, request.question)
 
         return QueryResponse(
