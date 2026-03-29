@@ -1,16 +1,11 @@
 from pydantic_settings import BaseSettings
+from typing import Optional
 
 class Settings(BaseSettings):
-    # OpenAI
     OPENAI_API_KEY: str
-
-    # LLMs
     GEMINI_API_KEY: str
-    OPENROUTER_API_KEY: str
-
-
-    # Database
     DATABASE_URL: str
+    OPENROUTER_API_KEY: Optional[str] = None
 
     class Config:
         env_file = ".env"
