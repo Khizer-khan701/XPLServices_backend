@@ -10,7 +10,7 @@ from app.core.config import settings
 openai_llm = ChatOpenAI(
     model="gpt-4o",
     api_key=settings.OPENAI_API_KEY,
-    temperature=0,
+    temperature=0.2, # Slightly higher temperature to handle minor variations/typos better
 )
 
 kimi_llm = ChatOpenAI(
@@ -18,22 +18,25 @@ kimi_llm = ChatOpenAI(
     api_key=settings.OPENROUTER_API_KEY,
     base_url="https://openrouter.ai/api/v1",
     max_tokens=500,
-    temperature=0,
+    temperature=0.2,
 )
 
 gemini_llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=settings.GEMINI_API_KEY,
     convert_system_message_to_human=True,
-    temperature=0,
+    temperature=0.2,
 )
 
 # ---- Prompt Template ----
-# Using ChatPromptTemplate for better performance with modern LLMs like GPT-4o
+# Updated system instruction to handle name variations (e.g., Sanmarg referring to Sunmarke)
 prompt_template = ChatPromptTemplate.from_messages([
     ("system", """You are a helpful assistant for Sunmarke School.
-Answer the question based ONLY on the provided context.
-If the answer is not in the context, say: "I don't have information about that in my knowledge base."
+Your goal is to answer questions about the school based ONLY on the provided context.
+
+IMPORTANT: If the user refers to the school by a slightly different name (e.g., "Sanmarg", "Sunmark", "Sunmarke School"), assume they are referring to Sunmarke School and answer using the provided context.
+
+If the answer is absolutely NOT in the context, say: "I don't have information about that in my knowledge base."
 
 Context:
 {context}"""),
